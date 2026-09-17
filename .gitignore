@@ -1,0 +1,14 @@
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+outputs/
+checkpoints/
+data/
+*.pt
+*.pth
+*.mat
+*.h5
+*.sqlite*
+.env
+configs/local*.yaml

@@ -1,0 +1,42 @@
+experiment:
+  mode: full_pipeline                 # full_pipeline | backbone | calibration
+  targets: [SBP, DBP]
+  seed: 1337
+  device: cuda:0                      # cpu also works (slower)
+  threads: 4
+  limit: null                        # first N CalFree patients; null = all 144
+
+paths:
+  data_path: ${PULSEDB_DATA_PATH}      # external directory containing the two .mat files
+  checkpoint_path: ${PULSEDB_CHECKPOINT_PATH}  # external backbone directory
+  output_dir: outputs/pulsedb         # use a different directory for each configuration
+
+calibration:
+  type: population                   # population (frozen checkpoint) | finetune
+
+full_pipeline:
+  hitl: false                        # true: review failed-gate cases before evaluation
+  deterministic_threshold:           # absolute routing-validation MAE caps, mmHg
+    SBP: 8.497991049265261
+    DBP: 5.934352619117226
+  noninferiority: {SBP: 0.10, DBP: 0.0}
+  inflation_max: {SBP: 1.5, DBP: 1.25}
+  search_weight: 0.75                 # reported Train-selected ranking weight
+  maximum_relative_ranking_regret: 0.05
+  minimum_supporting_development_neighbors: 3  # of four nearest Train examples
+  candidate_timeout_seconds: 25      # per candidate; null disables machine-speed cutoff
+
+llm:
+  provider: openai_compatible         # standard /chat/completions; or custom
+  model: Qwen3-Coder-30B-A3B-Instruct # set to the model identifier served by your provider
+  base_url: http://localhost:8000/v1
+  api_key_env: LLM_API_KEY             # optional for unauthenticated local servers
+  custom_callable: null               # custom: package.module:function(request, config)
+  timeout_seconds: 240
+  proposal_attempts: 2
+  routing_attempts: 3
+  proposal_temperature: 0.2
+  routing_temperature: 0.0
+  max_tokens: 1800
+  send_seed: true                     # disable only if the endpoint rejects seed
+  json_mode: true                     # disable only if the endpoint rejects response_format
