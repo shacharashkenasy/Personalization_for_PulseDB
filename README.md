@@ -2,7 +2,7 @@
 
 Standalone reproduction of the 160-window PulseDB experiment. There are **three experiment modes**: `backbone`, `calibration`, and `full_pipeline`. The reported full-pipeline reference is **5.721 SBP / 3.287 DBP mean patient MAE (mmHg)** over 144 CalFree patients.
 
-Only source code, configuration, split definitions, and tests are included. Data, model weights, generated memory, patient models, and results stay outside version control. No original research checkout or model-server-specific runtime is required.
+
 
 ## Setup
 
